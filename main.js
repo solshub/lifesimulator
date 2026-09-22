@@ -1,8 +1,6 @@
 import { savePlayerId, loadPlayerId } from './db.js';
 import { initFirebase, loadFromCloud, saveToCloud } from './firebase.js';
 
-let player = null;
-
 // authenticate with firebase and check indexedDB for existing save data
 const session = await initFirebase();
 let playerId = await getStoredPlayerId();
@@ -10,7 +8,7 @@ playerId = playerId ? playerId : (await savePlayerId(session.uid), session.uid);
 console.log(`🔑 ID: ${playerId}`);
 
 // pull save data from the cloud or create a new character
-player = await loadFromCloud(playerId);
+let player = await loadFromCloud(playerId);
 if (!player) {
   player = newCharacter();
   await syncToCloud(playerId, player);
