@@ -7,7 +7,7 @@ let gameState = null;
 const session = await initFirebase();
 let playerId = await getStoredPlayerId();
 player = player ? player : (await savePlayerId(session.uid), session.uid);
-console.log(`🔑 ID: ${playerId}`
+console.log(`🔑 ID: ${playerId}`);
 
 // pull save data from the cloud or create a new character
 player = await loadFromCloud(playerId);
