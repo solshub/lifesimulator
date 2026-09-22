@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Life Simulator</title>
+  <link rel="stylesheet" href="style.css">
+  // access to npm libraries via CDN without node
+  // firebase is required for firebase firestore
+  // idb allows the use of indexedDB
+  <script type="importmap">
+    {
+      "imports": {
+        "firebase/app": "https://esm.sh/firebase@10/app",
+        "firebase/firestore": "https://esm.sh/firebase@10/firestore",
+        "firebase/auth": "https://esm.sh/firebase@10/auth",
+        "idb": "https://esm.sh/idb"
+      }
+    }
+  </script>
+  <script type="module" src="main.js"></script>
+</head>
+<body>
+  
+</body>
+</html>
