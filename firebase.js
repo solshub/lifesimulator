@@ -1,6 +1,6 @@
 import { initializeApp } from 'firebase/app';
 import { getAuth, signInAnonymously } from 'firebase/auth';
-import { getFirestore, doc, setDoc, getDoc } from 'firebase/firestore';
+import { getFirestore } from 'firebase/firestore';
 
 const firebaseConfig = {
   apiKey: "",
@@ -24,4 +24,4 @@ export const initFirebase = async () => {
   return userCredential.user;
 };
 
-// set up syncToCloud and loadFromCloud
+// set up loadFromCloud and saveToCloud
