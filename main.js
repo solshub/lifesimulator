@@ -3,7 +3,7 @@ import { initFirebase, loadFromCloud, saveToCloud } from './firebase.js';
 
 // authenticate with firebase and check indexedDB for existing save data
 const session = await initFirebase();
-let playerId = await getStoredPlayerId();
+let playerId = await loadPlayerId();
 playerId = playerId ? playerId : (await savePlayerId(session.uid), session.uid);
 console.log(`🔑 ID: ${playerId}`);
 
