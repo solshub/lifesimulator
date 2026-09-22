@@ -6,7 +6,7 @@ let gameState = null;
 // authenticate with firebase and check indexedDB for existing save data
 const session = await initFirebase();
 let playerId = await getStoredPlayerId();
-player !!= (await savePlayerId(session.uid), session.uid);
+player = player ? player : (await savePlayerId(session.uid), session.uid);
 console.log(`🔑 ID: ${playerId}`
 
 // pull save data from the cloud or create a new character
