@@ -4,8 +4,7 @@
   --text: #1c1c1c;
 }
 
-/* uh not sure i'm going to use any thing yet actually better to keep as a comment to avoid conflict with any framework implemented in the future
-=== global resets for predictability ===
+/* === global resets for predictability === */
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
@@ -17,11 +16,8 @@ html {
 body {
   line-height: 1.5;
 }
-
 img, picture, video, canvas, svg {
   display: block;
   max-width: 100%;
   height: auto;
 }
-=== end of global resets ===
-*/
