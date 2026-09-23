@@ -1,4 +1,4 @@
-import { openDatabase } from 'idb';
+import { openDB } from 'idb';
 
 // IndexedDB uses the structure database -> store/table -> entry/row
 const databaseName = 'lifesimulator';
@@ -7,7 +7,7 @@ const tableName = 'authKeys';
 
 // set up IndexedDB and upgrade when version changes
 export const openIndexedDB = () => 
-  openDatabase(databaseName, databaseVersion, {
+  openDB(databaseName, databaseVersion, {
     upgrade: (database) => database.objectStoreNames.contains(tableName) ? null : database.createObjectStore(tableName)
   });
  
