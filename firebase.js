@@ -1,6 +1,6 @@
 import { initializeApp } from 'firebase/app';
 import { getAuth, signInAnonymously } from 'firebase/auth';
-import { getFirestore } from 'firebase/firestore';
+import { getFirestore, doc, getDoc, setDoc } from 'firebase/firestore';
 
 const firebaseConfig = {
   apiKey: "AIzaSyAFD3f-Hb6VPVTmv_vwWuvUg5lX5d0xVPM",
@@ -11,17 +11,30 @@ const firebaseConfig = {
   appId: "1:128943117741:web:a2485350fa3eb72722bd24"
 };
 
-let app, auth, db;
+let firebaseApp, firebaseAuth, firestoreDatabase;
 
+// Signs in anonymously or restores an existing browser session token
 export const initFirebase = async () => {
-  if(!app) {
-    app = initializeApp(firebaseConfig);
-    auth = getAuth(app);
-    db = getFirestore(app);
+  if (!firebaseApp) {
+    firebaseApp = initializeApp(firebaseConfig);
+    firebaseAuth = getAuth(firebaseApp);
+    firestoreDatabase = getFirestore(firebaseApp);
   }
-  // Signs in anonymously or restores an existing browser session token
-  const userCredential = await signInAnonymously(auth);
-  return userCredential.user;
+  const authCredential = await signInAnonymously(firebaseAuth);
+  return authCredential.user;
 };
 
-// set up loadFromCloud and saveToCloud
+// save data to Firestore database
+export const saveToCloud = async (playerId, playerData) => {
+  if (!firestoreDatabase) await initFirebase();
+  const saveData = doc(firestoreDatabase, 'players', playerId);
+  await setDoc(saveData, playerData, { merge: true });
+};
+
+// load saved data from Firestore database
+export const loadFromCloud = async (playerId) => {
+  if (!firestoreDatabase) await initFirebase();
+  const saveData = doc(firestoreDatabase, 'players', playerId);
+  const saveDataSnapshot = await getDoc(saveData);
+  return saveDataSnapshot.exists() ? saveDataSnapshot.data() : null;
+};

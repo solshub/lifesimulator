@@ -7,13 +7,8 @@ let playerId = await loadPlayerId();
 playerId = playerId ? playerId : (await savePlayerId(session.uid), session.uid);
 console.log(`🔑 ID: ${playerId}`);
 
-// pull save data from the cloud or create a new character
-let player = await loadFromCloud(playerId);
-if (!player) {
-  player = newCharacter();
-  await syncToCloud(playerId, player);
-};
-console.log(`👤 YOU'RE PLAYING AS ${player.name}`);
+// get random item from an array
+const getRandom = (array) => array[Math.floor(Math.random() * array.length)];
 
 // generate a new default character
 const newCharacter = () => ({
@@ -23,5 +18,10 @@ const newCharacter = () => ({
   wallet: 0
 });
 
-// get random item from an array
-const getRandom = (array) => array[Math.floor(Math.random() * array.length)];
+// pull save data from the cloud or create a new character
+let player = await loadFromCloud(playerId);
+if (!player) {
+  player = newCharacter();
+  await saveToCloud(playerId, player);
+};
+console.log(`👤 YOU'RE PLAYING AS ${player.name}`);

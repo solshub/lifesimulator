@@ -1,4 +1,4 @@
-import { openDB } from 'idb';
+import { openDatabase } from 'idb';
 
 // IndexedDB uses the structure database -> store/table -> entry/row
 const databaseName = 'lifesimulator';
