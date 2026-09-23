@@ -1,5 +1,5 @@
 import { savePlayerId, loadPlayerId } from './db.js';
-import { initFirebase, loadFromCloud, saveToCloud } from './firebase.js';
+import { initFirebase, loadFromFirebase, saveToFirebase } from './firebase.js';
 
 // authenticate with firebase and check indexedDB for existing save data
 const session = await initFirebase();
@@ -19,9 +19,9 @@ const newCharacter = () => ({
 });
 
 // pull save data from the cloud or create a new character
-let player = await loadFromCloud(playerId);
+let player = await loadFromFirebase(playerId);
 if (!player) {
   player = newCharacter();
-  await saveToCloud(playerId, player);
+  await saveToFirebase(playerId, player);
 };
 console.log(`👤 YOU'RE PLAYING AS ${player.name}`);

@@ -13,7 +13,7 @@ const firebaseConfig = {
 
 let firebaseApp, firebaseAuth, firestoreDatabase;
 
-// Signs in anonymously or restores an existing browser session token
+// creates a new session anonymously or restores an existing one through player id
 export const initFirebase = async () => {
   if (!firebaseApp) {
     firebaseApp = initializeApp(firebaseConfig);
@@ -29,14 +29,14 @@ export const initFirebase = async () => {
 };
 
 // save data to Firestore database
-export const saveToCloud = async (playerId, playerData) => {
+export const saveToFirebase = async (playerId, playerData) => {
   if (!firestoreDatabase) await initFirebase();
   const saveData = doc(firestoreDatabase, 'players', playerId);
   await setDoc(saveData, playerData, { merge: true });
 };
 
 // load saved data from Firestore database
-export const loadFromCloud = async (playerId) => {
+export const loadFromFirebase = async (playerId) => {
   if (!firestoreDatabase) await initFirebase();
   const saveData = doc(firestoreDatabase, 'players', playerId);
   const saveDataSnapshot = await getDoc(saveData);
