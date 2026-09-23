@@ -7,7 +7,7 @@ const tableName = 'authKeys';
 
 // set up IndexedDB and upgrade when version changes
 export const openIndexedDB = () => 
-  openDB(databaseName, databaseVersion, {
+  openDatabase(databaseName, databaseVersion, {
     upgrade: (database) => database.objectStoreNames.contains(tableName) ? null : database.createObjectStore(tableName)
   });
  
