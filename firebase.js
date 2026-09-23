@@ -13,28 +13,46 @@ const firebaseConfig = {
 
 let firebaseApp, firebaseAuth, firestoreDatabase;
 
-// creates a new session anonymously or restores an existing one through player id
+// Initialize Firebase with complete error shielding for ad blockers and offline users
 export const initFirebase = async () => {
-  if (!firebaseApp) {
-    firebaseApp = initializeApp(firebaseConfig);
-    firebaseAuth = getAuth(firebaseApp);
-    firestoreDatabase = getFirestore(firebaseApp);
+  try {
+    if (!firebaseApp) {
+      firebaseApp = initializeApp(firebaseConfig);
+      firebaseAuth = getAuth(firebaseApp);
+      firestoreDatabase = getFirestore(firebaseApp);
+    }
+    const authCredential = await signInAnonymously(firebaseAuth);
+    return authCredential.user;
+  } catch (error) {
+    console.warn("⚠️ Firebase Auth unreachable (ad blocker or offline). Falling back to local session.", error.message);
+    return { uid: 'offline_player' };
   }
-  const authCredential = await signInAnonymously(firebaseAuth);
-  return authCredential.user;
 };
 
-// save data to Firestore database
+// Save data to Firestore with silent error recovery
 export const saveToFirebase = async (playerId, playerData) => {
-  if (!firestoreDatabase) await initFirebase();
-  const saveData = doc(firestoreDatabase, 'players', playerId);
-  await setDoc(saveData, playerData, { merge: true });
+  try {
+    if (!firestoreDatabase) await initFirebase();
+    if (!firestoreDatabase) return false;
+    const saveData = doc(firestoreDatabase, 'players', playerId);
+    await setDoc(saveData, playerData, { merge: true });
+    return true;
+  } catch (error) {
+    console.warn("⚠️ Cloud save bypassed (ad blocker or offline). Saved locally.", error.message);
+    return false;
+  }
 };
 
-// load saved data from Firestore database
+// Load saved data from Firestore with silent error recovery
 export const loadFromFirebase = async (playerId) => {
-  if (!firestoreDatabase) await initFirebase();
-  const saveData = doc(firestoreDatabase, 'players', playerId);
-  const saveDataSnapshot = await getDoc(saveData);
-  return saveDataSnapshot.exists() ? saveDataSnapshot.data() : null;
+  try {
+    if (!firestoreDatabase) await initFirebase();
+    if (!firestoreDatabase) return null;
+    const saveData = doc(firestoreDatabase, 'players', playerId);
+    const saveDataSnapshot = await getDoc(saveData);
+    return saveDataSnapshot.exists() ? saveDataSnapshot.data() : null;
+  } catch (error) {
+    console.warn("⚠️ Cloud load bypassed (ad blocker or offline). Loading from local storage.", error.message);
+    return null;
+  }
 };
