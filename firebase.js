@@ -1,6 +1,6 @@
 import { initializeApp } from 'firebase/app';
 import { getAuth, signInAnonymously } from 'firebase/auth';
-import { initializeFirestore, doc, getDoc, setDoc } from 'firebase/firestore';
+import { getFirestore, doc, getDoc, setDoc } from 'firebase/firestore';
 
 const firebaseConfig = {
   apiKey: "AIzaSyAFD3f-Hb6VPVTmv_vwWuvUg5lX5d0xVPM",
@@ -18,11 +18,7 @@ export const initFirebase = async () => {
   if (!firebaseApp) {
     firebaseApp = initializeApp(firebaseConfig);
     firebaseAuth = getAuth(firebaseApp);
-    
-    // Use Long Polling to prevent ad blockers/firewalls from blocking WebChannel streams
-    firestoreDatabase = initializeFirestore(firebaseApp, {
-      experimentalForceLongPolling: true
-    });
+    firestoreDatabase = getFirestore(firebaseApp);
   }
   const authCredential = await signInAnonymously(firebaseAuth);
   return authCredential.user;
